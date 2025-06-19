@@ -27,6 +27,7 @@ body {
     grid-template-rows: repeat(3, 100px);
     gap: 5px;
     margin: 0 auto 20px auto;
+    justify-content: center;
   }
   
   .scratch-container {
@@ -78,3 +79,21 @@ body {
     font-weight: bold;
   }
   
+.next-button {
+  display: block;
+  margin: 10px auto 10px auto;
+  padding: 12px 24px;
+  background-color: #28a745;
+  color: white;
+  font-size: 1rem;
+  font-weight: bold;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+  transition: background-color 0.3s ease;
+}
+
+.next-button:hover {
+  background-color: #218838;
+}

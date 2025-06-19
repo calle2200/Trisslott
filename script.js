@@ -1,45 +1,81 @@
-const symbols = [
-    "ring.png", "plane.png", "dress.png",
-    "ring.png", "ring.png", "plane.png",
-    "dress.png", "necklace.png", "dress.png"
-  ];
-  
-  const container = document.getElementById("scratch-card");
-  const result = document.getElementById("result");
-  
+const cards = [
+  // Förlustlott 1
+  [
+    "resa.png", "smycke.png", "smycke.png",
+    "glass.png", "träningskläder.png", "glass.png",
+    "middag.png", "resa.png", "klänning.png"
+  ],
+  // Förlustlott 2
+  [
+    "smycke.png", "glass.png", "träningskläder.png",
+    "resa.png", "klänning.png", "resa.png",
+    "middag.png", "träningskläder.png", "glass.png"
+  ],
+  // Vinstlott 3 (3 st "ring.png")
+  [
+    "glass.png", "träningskläder.png", "resa.png",
+    "glass.png", "smycke.png", "middag.png",
+    "resa.png", "träningskläder.png", "glass.png"
+  ]
+];
+
+let currentCardIndex = 0;
+
+const container = document.getElementById("scratch-card");
+const result = document.getElementById("result");
+
+// Skapa "Nästa lott"-knappen
+const nextButton = document.createElement("button");
+nextButton.textContent = "Nästa lott";
+nextButton.style.display = "none";
+nextButton.className = "next-button";
+nextButton.addEventListener("click", () => {
+  currentCardIndex++;
+  if (currentCardIndex < cards.length) {
+    result.textContent = "";
+    renderCard(cards[currentCardIndex]);
+    nextButton.style.display = "none";
+  } else {
+    result.textContent = "Du har skrapat alla lotter!";
+    nextButton.style.display = "none";
+  }
+});
+
+// Lägg knappen under resultatet
+result.insertAdjacentElement("afterend", nextButton);
+
+function renderCard(symbols) {
+  container.innerHTML = "";
   let revealedCount = 0;
   const revealedValues = [];
-  
+
   symbols.forEach((imgFile) => {
     const wrap = document.createElement("div");
     wrap.className = "scratch-container";
-  
-    // Bild bakom skraplagret
+
     const valueDiv = document.createElement("div");
     valueDiv.className = "hidden-value";
     const img = document.createElement("img");
-    img.src = `images/${imgFile}`;  // Lägg bilder i "images/"-mappen
+    img.src = `images/${imgFile}`;
     valueDiv.appendChild(img);
     wrap.appendChild(valueDiv);
-  
-    // Hint-ikon ovanpå (visas innan man börjar skrapa)
+
     const hint = document.createElement("img");
     hint.className = "hint-icon";
-    hint.src = "images/gift.png"; // din "skrapa här"-ikon
+    hint.src = "images/gift.png";
     wrap.appendChild(hint);
-  
-    // Skraplager (canvas)
+
     const canvas = document.createElement("canvas");
     canvas.width = 100;
     canvas.height = 100;
     const ctx = canvas.getContext("2d");
-  
+
     ctx.fillStyle = "#B0B0B0";
     ctx.fillRect(0, 0, 100, 100);
-  
+
     let isDrawing = false;
     let scratchedPixels = 0;
-  
+
     const getXY = (e) => {
       const rect = canvas.getBoundingClientRect();
       let x, y;
@@ -52,7 +88,7 @@ const symbols = [
       }
       return { x, y };
     };
-  
+
     const scratch = (e) => {
       if (!isDrawing) return;
       e.preventDefault();
@@ -61,36 +97,42 @@ const symbols = [
       ctx.beginPath();
       ctx.arc(x, y, 15, 0, Math.PI * 2);
       ctx.fill();
-  
+
       scratchedPixels++;
-      if (scratchedPixels > 20 && !canvas.revealed) {
-        canvas.revealed = true;
-        hint.style.display = "none"; // Ta bort hint-ikonen
-        revealedCount++;
-        revealedValues.push(imgFile);
-        if (revealedCount === 9) checkWin();
-      }
+      if (scratchedPixels > 20) {
+  hint.style.display = "none"; // Dölj hint tidigt
+}
+
+if (scratchedPixels > 110 && !canvas.revealed) {
+  canvas.revealed = true;
+  revealedCount++;
+  revealedValues.push(imgFile);
+  if (revealedCount === 9) {
+    checkWin(revealedValues);
+  }
+}
     };
-  
+
     canvas.addEventListener("mousedown", () => isDrawing = true);
     canvas.addEventListener("mouseup", () => isDrawing = false);
     canvas.addEventListener("mousemove", scratch);
     canvas.addEventListener("mouseleave", () => isDrawing = false);
-  
+
     canvas.addEventListener("touchstart", () => isDrawing = true);
     canvas.addEventListener("touchend", () => isDrawing = false);
     canvas.addEventListener("touchmove", scratch);
-  
+
     wrap.appendChild(canvas);
     container.appendChild(wrap);
   });
-  
-  function checkWin() {
+
+  // Vinstkontroll
+  function checkWin(values) {
     const counts = {};
-    revealedValues.forEach(val => {
+    values.forEach(val => {
       counts[val] = (counts[val] || 0) + 1;
     });
-  
+
     let winner = null;
     for (let key in counts) {
       if (counts[key] >= 3) {
@@ -98,14 +140,21 @@ const symbols = [
         break;
       }
     }
-  
+
     if (winner) {
       const cleanName = winner.replace(".png", "");
-      result.textContent = `🎉 Du vann med tre ${cleanName}!`;
+      result.textContent = `Du vann med tre ${cleanName}!`;
       result.style.color = "green";
     } else {
-      result.textContent = "😢 Tyvärr, ingen vinst den här gången.";
+      result.textContent = "Ingen vinst den här gången.";
       result.style.color = "red";
     }
+
+    if (currentCardIndex < cards.length - 1) {
+      nextButton.style.display = "inline-block";
+    }
   }
-  
+}
+
+// Starta första lotten
+renderCard(cards[currentCardIndex]);
