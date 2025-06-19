@@ -1,0 +1,80 @@
+body {
+    background: #f0f0f0;
+    font-family: 'Segoe UI', sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+  }
+  
+  .lotto-wrapper {
+    background: linear-gradient(145deg, #e0c78a, #f7f1c6);
+    border: 5px solid gold;
+    border-radius: 20px;
+    padding: 30px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+    text-align: center;
+  }
+  
+  h1 {
+    margin-bottom: 20px;
+  }
+  
+  #scratch-card {
+    display: grid;
+    grid-template-columns: repeat(3, 100px);
+    grid-template-rows: repeat(3, 100px);
+    gap: 5px;
+    margin: 0 auto 20px auto;
+  }
+  
+  .scratch-container {
+    position: relative;
+    width: 100px;
+    height: 100px;
+  }
+  
+  .hidden-value {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    z-index: 0;
+    border-radius: 10px;
+    background-color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .hidden-value img {
+    max-width: 60%;
+    max-height: 60%;
+  }
+  
+  canvas {
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 2;
+    border-radius: 10px;
+    touch-action: none;
+  }
+  
+  .hint-icon {
+    position: absolute;
+    z-index: 3;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    opacity: 0.4;
+    width: 40px;
+    height: 40px;
+    pointer-events: none;
+  }
+  
+  #result {
+    font-size: 22px;
+    font-weight: bold;
+  }
+  
