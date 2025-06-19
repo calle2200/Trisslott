@@ -103,7 +103,7 @@ function renderCard(symbols) {
   hint.style.display = "none"; // Dölj hint tidigt
 }
 
-if (scratchedPixels > 90 && !canvas.revealed) {
+if (scratchedPixels > 60 && !canvas.revealed) {
   canvas.revealed = true;
   revealedCount++;
   revealedValues.push(imgFile);
