@@ -99,11 +99,11 @@ function renderCard(symbols) {
       ctx.fill();
 
       scratchedPixels++;
-      if (scratchedPixels > 20) {
+      if (scratchedPixels > 15) {
   hint.style.display = "none"; // Dölj hint tidigt
 }
 
-if (scratchedPixels > 110 && !canvas.revealed) {
+if (scratchedPixels > 90 && !canvas.revealed) {
   canvas.revealed = true;
   revealedCount++;
   revealedValues.push(imgFile);
